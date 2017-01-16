@@ -5,7 +5,7 @@
 CREATE TABLE customer (
     id bigint NOT NULL,
     created_at timestamp without time zone,
-    email character varying(255),
+    email character varying(255) NOT NULL,
     updated_at timestamp without time zone
 );
 
@@ -40,3 +40,5 @@ SELECT pg_catalog.setval('hibernate_sequence', 1, false);
 ALTER TABLE ONLY customer
     ADD CONSTRAINT customer_pkey PRIMARY KEY (id);
 
+ALTER TABLE ONLY customer 
+	ADD CONSTRAINT customer_email_unique UNIQUE (email);
