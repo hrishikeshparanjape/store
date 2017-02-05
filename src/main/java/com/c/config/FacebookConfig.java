@@ -30,7 +30,7 @@ public class FacebookConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests()
-			.antMatchers("/login**", "/swagger-ui**").permitAll()
+			.antMatchers("/login**", "/swagger**", "/configuration/**", "/v2/api-docs**", "/subscription**").permitAll()
 			.anyRequest()
 			.authenticated()
 			.and().logout().logoutSuccessUrl("/").permitAll()
