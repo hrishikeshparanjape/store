@@ -31,7 +31,7 @@ public class SubscriptionController {
 	public CreateSubscriptionResponse createSubscription(@RequestBody CreateSubscriptionRequest createSubscriptionRequest) throws AddressValidationException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
-			String facebookToken = ((OAuth2AuthenticationDetails)((OAuth2Authentication) auth.getPrincipal()).getDetails()).getTokenValue();
+			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 			CreateSubscriptionResponse ret = new CreateSubscriptionResponse();
 			ret.setSubscription(subscriptionService.startNewRideSubscription(createSubscriptionRequest.getStart(), createSubscriptionRequest.getEnd(), customerEmailAddress));

@@ -1,5 +1,15 @@
 package com.c.domain;
 
-public class Plan {
+import java.math.BigDecimal;
 
+public class Plan {
+    private BigDecimal rideDistance;
+
+	public BigDecimal getRideDistance() {
+		return rideDistance;
+	}
+
+	public void setRideDistance(BigDecimal rideDistance) {
+		this.rideDistance = rideDistance;
+	}
 }

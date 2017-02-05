@@ -37,6 +37,7 @@ public class SubscriptionService {
 	
 	private Plan getPlanByRideDistance(BigDecimal rideDistance) {
 		Plan ret = new Plan();
+		ret.setRideDistance(rideDistance);
 		return ret;
 	}
 }
