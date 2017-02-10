@@ -1,4 +1,4 @@
-package com.c.domain;
+package com.c.domain.location;
 
 import java.math.BigDecimal;
 

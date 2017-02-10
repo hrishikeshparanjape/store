@@ -1,4 +1,4 @@
-package com.c.services;
+package com.c.services.user;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

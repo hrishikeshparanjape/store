@@ -1,41 +1,49 @@
-package com.c.controllers.subscriptions;
+package com.c.controllers.payment;
 
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.c.exceptions.AddressValidationException;
-import com.c.services.FacebookGraphApiClient;
-import com.c.services.SubscriptionService;
+import com.c.services.payment.CreditCardService;
+import com.c.services.user.FacebookGraphApiClient;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 
 @RestController
-public class SubscriptionController {
+public class PaymentController {
 	
 	@Autowired
-	private SubscriptionService subscriptionService;
+	private CreditCardService creditCardService;
 	
 	@Autowired
 	private FacebookGraphApiClient facebookGraphApiClient;
 	
-	@RequestMapping(path="/subscription", method=RequestMethod.POST)
-	public CreateSubscriptionResponse createSubscription(@RequestBody CreateSubscriptionRequest createSubscriptionRequest) throws AddressValidationException {
+	@RequestMapping(path="/paymentmethod", method=RequestMethod.POST)
+	public ResponseEntity<Void> createPaymentMethod(@RequestBody CreatePaymentMethodRequest createPaymentMethodRequest) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
 			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
-			CreateSubscriptionResponse ret = new CreateSubscriptionResponse();
-			ret.setSubscription(subscriptionService.startNewRideSubscription(createSubscriptionRequest.getStart(), createSubscriptionRequest.getEnd(), customerEmailAddress));
-			return ret;
+			if ("card".equals(createPaymentMethodRequest.getType())) {
+				creditCardService.addNewCreditCard(customerEmailAddress, createPaymentMethodRequest.getData());
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			} else {
+				throw new UnsupportedOperationException("payment method not supported");
+			}
 		} else {
 			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
 		}
