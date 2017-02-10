@@ -1,10 +1,10 @@
-package com.c.controllers.subscriptions;
+package com.c.controllers.orders;
 
 import javax.validation.constraints.NotNull;
 
-import com.c.domain.Address;
+import com.c.domain.location.Address;
 
-public class CreateSubscriptionRequest {
+public class CreateOrderRequest {
 	
 	@NotNull
 	private Address start;

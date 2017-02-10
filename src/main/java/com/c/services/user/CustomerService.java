@@ -1,9 +1,9 @@
-package com.c.services;
+package com.c.services.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.c.domain.Customer;
+import com.c.domain.user.Customer;
 import com.c.repositories.CustomerRepository;
 
 @Service

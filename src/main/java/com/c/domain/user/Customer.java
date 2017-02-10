@@ -1,4 +1,4 @@
-package com.c.domain;
+package com.c.domain.user;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +25,10 @@ public class Customer {
     @Column(unique=true)
     @Email
     private String email;
-    
+
+    @Column(unique=true)
+    private String paymentServiceId;
+
     private Date createdAt;
     
     private Date updatedAt;
@@ -73,5 +76,13 @@ public class Customer {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	
+	public String getPaymentServiceId() {
+		return paymentServiceId;
+	}
+	
+	public void setPaymentServiceId(String paymentServiceId) {
+		this.paymentServiceId = paymentServiceId;
 	}
 }

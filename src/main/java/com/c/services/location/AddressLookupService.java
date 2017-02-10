@@ -1,4 +1,4 @@
-package com.c.services;
+package com.c.services.location;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import com.c.domain.Address;
-import com.c.domain.GeoLocation;
+import com.c.domain.location.Address;
+import com.c.domain.location.GeoLocation;
 import com.c.exceptions.AddressValidationException;
 
 @Service
