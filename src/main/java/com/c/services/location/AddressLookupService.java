@@ -33,7 +33,7 @@ public class AddressLookupService {
 	@PostConstruct
 	public void init() throws IOException {
 		usWestAddresses = new ZipFile(
-				resourceLoader.getResource("file:/tmp/addresses/openaddr-collected-us_west.zip").getFile());
+				resourceLoader.getResource("file:/tmp/openaddr-collected-us_west.zip").getFile());
 		Enumeration<? extends ZipEntry> entries = usWestAddresses.entries();
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = entries.nextElement();
