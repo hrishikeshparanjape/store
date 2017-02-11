@@ -3,14 +3,15 @@ version: 0.1
 phases:
   install:
     commands:
-      - echo Nothing to do in the install phase...
+      - apt-get update -y
+      - apt-get install -y gradle
   pre_build:
     commands:
       - cd /tmp && { curl -O https://s3-us-west-1.amazonaws.com/storeuser-publicbucket/addresses/openaddr-collected-us_west.zip ; cd -; }
   build:
     commands:
       - echo Build started on `date`
-      - ./gradlew install
+      - gradle build
   post_build:
     commands:
       - echo Build completed on `date`
