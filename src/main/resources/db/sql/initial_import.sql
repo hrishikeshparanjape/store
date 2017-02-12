@@ -1,5 +1,5 @@
 --
--- Name: customer; Type: TABLE; Schema: store_user; Owner: store_user
+-- Name: customer; Type: TABLE; Schema: storeuser; Owner: storeuser
 --
 
 CREATE TABLE customer (
@@ -10,10 +10,10 @@ CREATE TABLE customer (
 );
 
 
-ALTER TABLE customer OWNER TO store_user;
+ALTER TABLE customer OWNER TO storeuser;
 
 --
--- Name: hibernate_sequence; Type: SEQUENCE; Schema: store_user; Owner: store_user
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: storeuser; Owner: storeuser
 --
 
 CREATE SEQUENCE hibernate_sequence
@@ -24,17 +24,17 @@ CREATE SEQUENCE hibernate_sequence
     CACHE 1;
 
 
-ALTER TABLE hibernate_sequence OWNER TO store_user;
+ALTER TABLE hibernate_sequence OWNER TO storeuser;
 
 --
--- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: store_user; Owner: store_user
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: storeuser; Owner: storeuser
 --
 
 SELECT pg_catalog.setval('hibernate_sequence', 1, false);
 
 
 --
--- Name: customer customer_pkey; Type: CONSTRAINT; Schema: store_user; Owner: store_user
+-- Name: customer customer_pkey; Type: CONSTRAINT; Schema: storeuser; Owner: storeuser
 --
 
 ALTER TABLE ONLY customer
