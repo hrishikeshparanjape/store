@@ -7,6 +7,7 @@ environment_variables:
 phases:
   install:
     commands:
+      - add-apt-repository -y ppa:cwchien/gradle
       - apt-get update -y
       - apt-get install -y gradle
   pre_build:
