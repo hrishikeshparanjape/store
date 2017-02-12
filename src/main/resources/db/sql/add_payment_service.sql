@@ -1,5 +1,5 @@
 --
--- Name: ride_order; Type: TABLE; Schema: store_user; Owner: store_user
+-- Name: ride_order; Type: TABLE; Schema: storeuser; Owner: storeuser
 --
 
 CREATE TABLE ride_order (
@@ -11,10 +11,10 @@ CREATE TABLE ride_order (
 );
 
 
-ALTER TABLE ride_order OWNER TO store_user;
+ALTER TABLE ride_order OWNER TO storeuser;
 
 --
--- Name: ride_order; Type: CONSTRAINT; Schema: store_user; Owner: store_user
+-- Name: ride_order; Type: CONSTRAINT; Schema: storeuser; Owner: storeuser
 --
 
 ALTER TABLE ONLY ride_order
@@ -27,7 +27,7 @@ ALTER TABLE ONLY ride_order
     ADD CONSTRAINT customer_id_fkey FOREIGN KEY (customer_id) REFERENCES customer (id);
 
 --
--- Name: customer.payment_service_id; Schema: store_user; Owner: store_user
+-- Name: customer.payment_service_id; Schema: storeuser; Owner: storeuser
 --
 
 ALTER TABLE ONLY customer 
