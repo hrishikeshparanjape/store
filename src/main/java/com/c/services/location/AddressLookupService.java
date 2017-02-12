@@ -1,8 +1,12 @@
 package com.c.services.location;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +36,12 @@ public class AddressLookupService {
 
 	@PostConstruct
 	public void init() throws IOException {
+		URL website = new URL("https://s3-us-west-1.amazonaws.com/storeuser-publicbucket/addresses/openaddr-collected-us_west.zip");
+		ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+		FileOutputStream fos = new FileOutputStream("/tmp/openaddr-collected-us_west.zip");
+		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		fos.close();
+		
 		usWestAddresses = new ZipFile(
 				resourceLoader.getResource("file:/tmp/openaddr-collected-us_west.zip").getFile());
 		Enumeration<? extends ZipEntry> entries = usWestAddresses.entries();
