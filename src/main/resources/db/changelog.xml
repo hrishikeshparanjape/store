@@ -22,5 +22,13 @@
 			splitStatements="true" 
 			stripComments="true" />
 	</changeSet>
-	
+
+	<changeSet author="hrishikeshparanjape" id="add_address_entities">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/add_address_entities.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
 </databaseChangeLog>

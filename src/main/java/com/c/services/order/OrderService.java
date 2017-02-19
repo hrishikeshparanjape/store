@@ -6,11 +6,13 @@ import java.math.RoundingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.c.controllers.orders.AddressRequest;
 import com.c.domain.location.Address;
 import com.c.domain.location.GeoLocation;
 import com.c.domain.order.RideOrder;
 import com.c.domain.user.Customer;
 import com.c.exceptions.AddressValidationException;
+import com.c.repositories.AddressRepository;
 import com.c.repositories.CustomerRepository;
 import com.c.repositories.OrderRepository;
 import com.c.services.location.AddressLookupService;
@@ -30,12 +32,15 @@ public class OrderService {
 	private CustomerRepository customerRepository;
 
 	@Autowired
+	private AddressRepository addressRepository;
+
+	@Autowired
 	private OrderRepository orderRepository;
 
 	@Autowired
 	private AddressLookupService addressLookupService;
 
-	public RideOrder createNewOrder(Address rideStartPoint, Address rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+	public RideOrder createNewOrder(AddressRequest rideStartPoint, AddressRequest rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Customer customer = customerRepository.findByEmail(customerEmailAddress);
 		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint);
 		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint);
@@ -48,9 +53,26 @@ public class OrderService {
 		String orderPaymentServiceId = stripePaymentService.createNewOrder(customerPaymentServiceId, productSku, "usd");
 		order.setPaymentServiceId(orderPaymentServiceId);
 		order.setCustomer(customer);
+		order.setStartLocation(getAddressEntityFromAddressRequest(rideStartPoint));
+		order.setEndLocation(getAddressEntityFromAddressRequest(rideFinishPoint));
 		order = orderRepository.save(order);
 		return order;
-	}	
+	}
+	
+	private Address getAddressEntityFromAddressRequest(AddressRequest addressRequest) {
+		Address ret = new Address();
+		ret.setLine1(addressRequest.getLine1());
+		ret.setLine2(addressRequest.getLine2());
+		ret.setLine3(addressRequest.getLine3());
+		ret.setLine4(addressRequest.getLine4());
+		ret.setCity(addressRequest.getCity());
+		ret.setState(addressRequest.getState());
+		ret.setPostCode(addressRequest.getPostCode());
+		ret.setCountry(addressRequest.getCountry());
+		ret.setLocality(addressRequest.getLocality());
+		ret = addressRepository.save(ret);
+		return ret;
+	}
 	
 	private String getProductSku(BigDecimal rideDistance) {
 		rideDistance = rideDistance.setScale(0, RoundingMode.UP);
