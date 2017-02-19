@@ -1,9 +1,9 @@
-DROP DATABASE store_db;
-DROP USER store_user ;
-CREATE USER store_user WITH PASSWORD 'fred';
-CREATE DATABASE store_db;
-GRANT ALL ON DATABASE store_db TO store_user;
-\connect store_db
+DROP DATABASE ebdb;
+DROP USER storeuser ;
+CREATE USER storeuser WITH PASSWORD 'Password2';
+CREATE DATABASE ebdb;
+GRANT ALL ON DATABASE ebdb TO storeuser;
+\connect ebdb
 -- create schema store_user and give authorization to store_user
-CREATE SCHEMA AUTHORIZATION store_user;
-ALTER ROLE store_user SET search_path TO store_user;
+CREATE SCHEMA AUTHORIZATION storeuser;
+ALTER ROLE storeuser SET search_path TO storeuser;

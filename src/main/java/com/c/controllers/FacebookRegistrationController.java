@@ -22,7 +22,7 @@ public class FacebookRegistrationController {
 	@Autowired
 	private CustomerService customerService;
 	
-	@RequestMapping(path="/customer", method=RequestMethod.GET)
+	@RequestMapping(path="", method=RequestMethod.GET)
 	public Customer user(Principal principal) {
 		String facebookToken = ((OAuth2AuthenticationDetails)((OAuth2Authentication) principal).getDetails()).getTokenValue();
 		String emailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);

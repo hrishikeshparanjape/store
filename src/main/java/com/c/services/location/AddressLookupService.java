@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import com.c.domain.location.Address;
+import com.c.controllers.orders.AddressRequest;
 import com.c.domain.location.GeoLocation;
 import com.c.exceptions.AddressValidationException;
 
@@ -77,7 +77,7 @@ public class AddressLookupService {
 		}
 	}
 
-	public GeoLocation getGeoLocationByAddress(Address address) throws AddressValidationException {
+	public GeoLocation getGeoLocationByAddress(AddressRequest address) throws AddressValidationException {
 		Set<ZipEntry> zipEntriesToScan = postCodeZipEntryMapping.get(address.getPostCode());
 		for(ZipEntry entry : zipEntriesToScan) {			
 			BufferedReader br = null;

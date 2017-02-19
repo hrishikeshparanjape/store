@@ -1,72 +1,16 @@
-package com.c.domain.location;
+package com.c.controllers.orders;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-
-@Entity
-public class Address {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class AddressRequest {
 
 	private String line1;
-	
 	private String line2;
-	
 	private String line3;
-	
 	private String line4;
-	
 	private String city;
-	
 	private String postCode;
-	
 	private String state;
-	
 	private String country;
-	
 	private String locality;
-
-	private Date createdAt;
-
-	private Date updatedAt;
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
-	@PrePersist
-	public void preCreate() {
-		Calendar now = Calendar.getInstance();
-		createdAt = now.getTime();
-		updatedAt = now.getTime();
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		Calendar now = Calendar.getInstance();
-		updatedAt = now.getTime();
-	}
 
 	public String getLine1() {
 		return line1;

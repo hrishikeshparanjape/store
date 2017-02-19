@@ -28,6 +28,8 @@ public class Customer {
 
     @Column(unique=true)
     private String paymentServiceId;
+    
+    private String roles;
 
     private Date createdAt;
     
@@ -84,5 +86,13 @@ public class Customer {
 	
 	public void setPaymentServiceId(String paymentServiceId) {
 		this.paymentServiceId = paymentServiceId;
+	}
+	
+	public String getRoles() {
+		return roles;
+	}
+	
+	public void setRoles(String roles) {
+		this.roles = roles;
 	}
 }

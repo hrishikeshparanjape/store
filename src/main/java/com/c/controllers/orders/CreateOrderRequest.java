@@ -2,29 +2,27 @@ package com.c.controllers.orders;
 
 import javax.validation.constraints.NotNull;
 
-import com.c.domain.location.Address;
-
 public class CreateOrderRequest {
 	
 	@NotNull
-	private Address start;
+	private AddressRequest start;
 	
 	@NotNull
-	private Address end;
+	private AddressRequest end;
 
-	public Address getStart() {
+	public AddressRequest getStart() {
 		return start;
 	}
 
-	public void setStart(Address start) {
+	public void setStart(AddressRequest start) {
 		this.start = start;
 	}
 
-	public Address getEnd() {
+	public AddressRequest getEnd() {
 		return end;
 	}
 
-	public void setEnd(Address end) {
+	public void setEnd(AddressRequest end) {
 		this.end = end;
 	}
 	
