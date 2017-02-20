@@ -4,20 +4,24 @@
 3. MapQuest Driving Distance
 4. Stripe Payments
 
+# how to run this project
+1. Install java 8 jdk, gradle, postgres 
+2. Run `psql < database/new_db.sql`
+3. run `gradle build`
+4. run `gradle bootRun`
+5. Go to localhost:5000/swagger-ui.html
+
 # sample requests
 
 1. Facebook Login
 GET localhost:8080/login/facebook
 
-2. SignUp Or Login
-GET localhost:8080/customer
-
-3. Add Credit Card
+2. Add Credit Card
 POST localhost:8080/paymentmethods
 {
     "data": {
-        "exp_month": "10", 
-        "exp_year": "2020", 
+        "expiryMonth": "10", 
+        "expiryYear": "2020", 
         "number": "4242424242424242", 
         "cvc": "876", 
         "name": "Hrishikesh Paranjape"
