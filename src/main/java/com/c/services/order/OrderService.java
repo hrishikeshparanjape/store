@@ -16,6 +16,7 @@ import com.c.repositories.AddressRepository;
 import com.c.repositories.CustomerRepository;
 import com.c.repositories.OrderRepository;
 import com.c.services.location.AddressLookupService;
+import com.c.services.ride.RideAssignmentManager;
 import com.stripe.exception.APIConnectionException;
 import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
@@ -39,6 +40,9 @@ public class OrderService {
 
 	@Autowired
 	private AddressLookupService addressLookupService;
+	
+	@Autowired
+	private RideAssignmentManager rideAssignmentManager;
 
 	public RideOrder createNewOrder(AddressRequest rideStartPoint, AddressRequest rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Customer customer = customerRepository.findByEmail(customerEmailAddress);
@@ -56,6 +60,7 @@ public class OrderService {
 		order.setStartLocation(getAddressEntityFromAddressRequest(rideStartPoint));
 		order.setEndLocation(getAddressEntityFromAddressRequest(rideFinishPoint));
 		order = orderRepository.save(order);
+		rideAssignmentManager.assignServiceProviderToRideOrder(order);
 		return order;
 	}
 	
