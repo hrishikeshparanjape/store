@@ -31,4 +31,14 @@
 			splitStatements="true" 
 			stripComments="true" />
 	</changeSet>
+
+	<changeSet author="hrishikeshparanjape" id="add_ride_provider">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/add_ride_provider.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+
 </databaseChangeLog>
