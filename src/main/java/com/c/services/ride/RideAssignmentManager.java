@@ -1,6 +1,7 @@
 package com.c.services.ride;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -33,17 +34,36 @@ public class RideAssignmentManager {
 		req.setPostCode(rideOrder.getStartLocation().getPostCode());
 		req.setLine1(rideOrder.getStartLocation().getLine1());
 		GeoLocation startLocation = addressLookupService.getGeoLocationByAddress(req);
-		RideProvider rideProvider = getNearestOnlineRideProvider(startLocation);
+		RideProvider rideProvider = getNearestOnlineAvailableRideProvider(startLocation);
 		rideOrder.setServiceProvider(rideProvider.getCustomer());
 		orderRepository.save(rideOrder);
 	}
 	
-	private RideProvider getNearestOnlineRideProvider(GeoLocation start) {
+	private void x(RideOrder rideOrder) {
+		Iterable<RideProvider> rideProviders = rideProviderRepository.findAll();
+		for (RideProvider provider : rideProviders) {
+			List<RideOrder> rideOrders = provider.getRidesInProgress();
+			for (int i = 0; i< rideOrders.size(); i++) {
+				String currentZipCode = null; //get current provider location
+				String providerEndZipCode = rideOrders.get(i).getEndLocation().getPostCode();
+				if (getRoute(currentZipCode, providerEndZipCode)
+						.contains(rideOrder.getEndLocation().getPostCode())) {
+					provider.getRidesInProgress().add(i, rideOrder);
+				}
+			}
+		}
+	}
+	
+	private List<String> getRoute(String currentZipCode, String endZipCode) {
+		return null;
+	}
+	
+	private RideProvider getNearestOnlineAvailableRideProvider(GeoLocation start) {
 		Iterable<RideProvider> rideProviders = rideProviderRepository.findAll();
 		BigDecimal minDistance = BigDecimal.valueOf(Long.MAX_VALUE);
 		RideProvider bestRideProvider = null;
 		for (RideProvider provider : rideProviders) {
-			if (provider.isOnline() && provider.getRidesInProgress().compareTo(provider.getCapacity()) == -1) {
+			if (provider.isOnline() && provider.getRidesInProgress().size() < provider.getCapacity().intValue()) {
 				GeoLocation providerLocation = new GeoLocation();
 				providerLocation.setLatitude(provider.getGeoLocation().split(",")[0]);
 				providerLocation.setLongitude(provider.getGeoLocation().split(",")[1]);

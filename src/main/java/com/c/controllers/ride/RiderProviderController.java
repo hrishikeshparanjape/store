@@ -1,6 +1,7 @@
 package com.c.controllers.ride;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c.domain.location.RideProvider;
+import com.c.domain.order.RideOrder;
 import com.c.domain.user.Customer;
 import com.c.repositories.CustomerRepository;
 import com.c.repositories.RideProviderRepository;
@@ -46,7 +48,7 @@ public class RiderProviderController {
 					rideProvider = new RideProvider();
 					rideProvider.setCustomer(customer);
 					rideProvider.setCapacity(BigInteger.valueOf(3));
-					rideProvider.setRidesInProgress(BigInteger.valueOf(0));
+					rideProvider.setRidesInProgress(new ArrayList<RideOrder>());
 				}
 				rideProvider.setGeoLocation(reportLocationRequest.getGeoLocation());
 				rideProvider.setOnline(reportLocationRequest.isOnline());
