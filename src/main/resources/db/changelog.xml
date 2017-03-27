@@ -50,4 +50,30 @@
 			stripComments="true" />
 	</changeSet>
 
+	<changeSet author="hrishikeshparanjape" id="zip_code_schema">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_schema.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+	
+	<changeSet author="hrishikeshparanjape" id="zip_code_data">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_data.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+	
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
 </databaseChangeLog>
