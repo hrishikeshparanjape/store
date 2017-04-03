@@ -51,6 +51,7 @@ public class RiderProviderController {
 					rideProvider.setRidesInProgress(new ArrayList<RideOrder>());
 				}
 				rideProvider.setGeoLocation(reportLocationRequest.getGeoLocation());
+				rideProvider.setPostCode(reportLocationRequest.getPostCode());
 				rideProvider.setOnline(reportLocationRequest.isOnline());
 				rideProviderRepository.save(rideProvider);				
 			} else {

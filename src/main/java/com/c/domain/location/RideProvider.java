@@ -30,6 +30,8 @@ public class RideProvider {
 
 	private String geoLocation;
 	
+	private String postCode;
+	
 	@OneToMany
 	private List<RideOrder> ridesInProgress;
 
@@ -125,5 +127,13 @@ public class RideProvider {
 	
 	public void setRidesInProgress(List<RideOrder> ridesInProgress) {
 		this.ridesInProgress = ridesInProgress;
+	}
+	
+	public String getPostCode() {
+		return postCode;
+	}
+	
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 }

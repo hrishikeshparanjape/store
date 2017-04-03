@@ -68,10 +68,82 @@
 			stripComments="true" />
 	</changeSet>
 	
-	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data">
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_1">
+			<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data_1_1_1.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+	
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_2">
+			<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data_1_1_2.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_3">
+			<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data_1_2_1.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_4">
+			<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data_1_2_2.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_5">
+			<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data_2_1_1.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_6">
 		<sqlFile 
 			encoding="utf8" 
-			path="sql/zip_code_neighbors_data.sql"
+			path="sql/zip_code_neighbors_data_2_1_2.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />		
+	</changeSet>
+	
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_7">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data_2_2_1.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+	
+	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_8">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/zip_code_neighbors_data_2_2_2.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
+	
+	<changeSet author="hrishikeshparanjape" id="refactor_entities">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/refactor_entities.sql"
 			relativeToChangelogFile="true"
 			splitStatements="true" 
 			stripComments="true" />

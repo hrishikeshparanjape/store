@@ -46,8 +46,8 @@ public class OrderService {
 
 	public RideOrder createNewOrder(AddressRequest rideStartPoint, AddressRequest rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Customer customer = customerRepository.findByEmail(customerEmailAddress);
-		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint);
-		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint);
+		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint.getPostCode(), rideStartPoint.getLine1());
+		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint.getPostCode(), rideFinishPoint.getLine1());
 		RideOrder order = new RideOrder();
 		
 		String customerPaymentServiceId = getCustomerPaymentServiceId(customer);

@@ -77,8 +77,8 @@ public class AddressLookupService {
 		}
 	}
 
-	public GeoLocation getGeoLocationByAddress(AddressRequest address) throws AddressValidationException {
-		Set<ZipEntry> zipEntriesToScan = postCodeZipEntryMapping.get(address.getPostCode());
+	public GeoLocation getGeoLocationByAddress(String postCode, String addressLine1) throws AddressValidationException {
+		Set<ZipEntry> zipEntriesToScan = postCodeZipEntryMapping.get(postCode);
 		for(ZipEntry entry : zipEntriesToScan) {			
 			BufferedReader br = null;
 			String line;
@@ -89,9 +89,9 @@ public class AddressLookupService {
 					if (parts.length != 11) {
 						continue;
 					}
-					if (parts[8].equals(address.getPostCode())) {
+					if (parts[8].equals(postCode)) {
 						String numberAndStreetDatabase = parts[2] + parts[3].split(" ")[0];
-						String[] inputParts = address.getLine1().split(" ");
+						String[] inputParts = addressLine1.split(" ");
 						String numberAndStreetInput = inputParts[0] + inputParts[1];
 						if(numberAndStreetDatabase.equalsIgnoreCase(numberAndStreetInput)) {
 							GeoLocation ret = new GeoLocation();
@@ -114,7 +114,7 @@ public class AddressLookupService {
 			}
 		}
 		
-		throw new AddressValidationException("Invalid address: address=" + address.toString());
+		throw new AddressValidationException("Invalid address: address=" + addressLine1 + ", zip=" + postCode);
 		
 	}	
 }

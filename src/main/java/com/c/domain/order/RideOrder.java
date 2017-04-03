@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import com.c.domain.location.Address;
+import com.c.domain.location.RideProvider;
 import com.c.domain.user.Customer;
 
 @Entity
@@ -33,7 +34,7 @@ public class RideOrder {
     private Customer customer;
 
     @ManyToOne
-    private Customer serviceProvider;
+    private RideProvider serviceProvider;
     
     @ManyToOne
     private Address startLocation;
@@ -94,11 +95,11 @@ public class RideOrder {
 		this.customer = customer;
 	}
 	
-	public Customer getServiceProvider() {
+	public RideProvider getServiceProvider() {
 		return serviceProvider;
 	}
 	
-	public void setServiceProvider(Customer serviceProvider) {
+	public void setServiceProvider(RideProvider serviceProvider) {
 		this.serviceProvider = serviceProvider;
 	}
 
