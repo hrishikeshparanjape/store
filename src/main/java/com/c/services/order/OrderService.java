@@ -15,7 +15,7 @@ import com.c.exceptions.AddressValidationException;
 import com.c.repositories.AddressRepository;
 import com.c.repositories.CustomerRepository;
 import com.c.repositories.OrderRepository;
-import com.c.services.location.AddressLookupService;
+import com.c.services.location.IAddressLookupService;
 import com.c.services.ride.RideAssignmentManager;
 import com.stripe.exception.APIConnectionException;
 import com.stripe.exception.APIException;
@@ -39,15 +39,15 @@ public class OrderService {
 	private OrderRepository orderRepository;
 
 	@Autowired
-	private AddressLookupService addressLookupService;
+	private IAddressLookupService addressLookupService;
 	
 	@Autowired
 	private RideAssignmentManager rideAssignmentManager;
 
 	public RideOrder createNewOrder(AddressRequest rideStartPoint, AddressRequest rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Customer customer = customerRepository.findByEmail(customerEmailAddress);
-		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint);
-		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint);
+		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint.getPostCode(), rideStartPoint.getLine1());
+		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint.getPostCode(), rideFinishPoint.getLine1());
 		RideOrder order = new RideOrder();
 		
 		String customerPaymentServiceId = getCustomerPaymentServiceId(customer);

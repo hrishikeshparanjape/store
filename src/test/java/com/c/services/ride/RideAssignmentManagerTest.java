@@ -1,4 +1,4 @@
-package com.c;
+package com.c.services.ride;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,10 +9,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class StoreApplicationTests {
-
+public class RideAssignmentManagerTest {
+	
 	@Test
-	public void contextLoads() {
+	public void testAssignServiceProviderToRideOrder() {
+		
 	}
-
 }

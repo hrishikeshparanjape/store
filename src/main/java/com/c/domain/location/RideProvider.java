@@ -3,15 +3,18 @@ package com.c.domain.location;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.c.domain.order.RideOrder;
 import com.c.domain.user.Customer;
 
 @Entity
@@ -26,6 +29,11 @@ public class RideProvider {
 	private Date updatedAt;
 
 	private String geoLocation;
+	
+	private String postCode;
+	
+	@OneToMany
+	private List<RideOrder> ridesInProgress;
 
 	@OneToOne
 	private Customer customer;
@@ -35,8 +43,6 @@ public class RideProvider {
 	private String city;
 	
 	private BigInteger capacity;
-	
-	private BigInteger ridesInProgress;
 	
     @PrePersist
     public void preCreate() {
@@ -114,12 +120,20 @@ public class RideProvider {
 	public void setCapacity(BigInteger capacity) {
 		this.capacity = capacity;
 	}
-
-	public BigInteger getRidesInProgress() {
+	
+	public List<RideOrder> getRidesInProgress() {
 		return ridesInProgress;
 	}
-
-	public void setRidesInProgress(BigInteger ridesInProgress) {
+	
+	public void setRidesInProgress(List<RideOrder> ridesInProgress) {
 		this.ridesInProgress = ridesInProgress;
-	}	
+	}
+	
+	public String getPostCode() {
+		return postCode;
+	}
+	
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
 }
