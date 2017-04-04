@@ -14,11 +14,6 @@ import com.c.exceptions.AddressValidationException;
 @Profile("test")
 public class TestAddressLookupService implements IAddressLookupService {
 
-	@PostConstruct
-	public void init() throws IOException {
-		System.out.println("Initializing TestAddressLookupService");
-	}
-	
 	@Override
 	public GeoLocation getGeoLocationByAddress(String postCode, String addressLine1) throws AddressValidationException {
 		// TODO Auto-generated method stub
