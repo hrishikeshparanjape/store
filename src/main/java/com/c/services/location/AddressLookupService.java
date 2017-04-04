@@ -18,15 +18,16 @@ import java.util.zip.ZipFile;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import com.c.controllers.orders.AddressRequest;
 import com.c.domain.location.GeoLocation;
 import com.c.exceptions.AddressValidationException;
 
 @Service
-public class AddressLookupService {
+@Profile({"aws","local"})
+public class AddressLookupService implements IAddressLookupService {
 
 	@Autowired
 	private ResourceLoader resourceLoader;

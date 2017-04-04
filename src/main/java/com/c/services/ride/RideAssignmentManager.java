@@ -17,7 +17,7 @@ import com.c.exceptions.AddressValidationException;
 import com.c.repositories.OrderRepository;
 import com.c.repositories.RideProviderRepository;
 import com.c.repositories.ZipCodeRepository;
-import com.c.services.location.AddressLookupService;
+import com.c.services.location.IAddressLookupService;
 import com.c.services.location.RouteService;
 
 @Service
@@ -33,7 +33,7 @@ public class RideAssignmentManager {
 	private RideProviderRepository rideProviderRepository;
 	
 	@Autowired
-	private AddressLookupService addressLookupService;
+	private IAddressLookupService addressLookupService;
 	
 	@Autowired
 	private OrderRepository orderRepository;
