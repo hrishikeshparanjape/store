@@ -7,6 +7,15 @@ public class GeoLocation {
 	private String longitude;
 
 	private String latitude;
+	
+	public GeoLocation(String geoLocationString) {
+		this.latitude = geoLocationString.split(",")[0];
+		this.longitude = geoLocationString.split(",")[1].trim();
+	}
+	
+	public GeoLocation() {
+		
+	}
 
 	public String getLongitude() {
 		return longitude;
