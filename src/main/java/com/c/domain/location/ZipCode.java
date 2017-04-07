@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class ZipCode {
 
 	private String code;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	private Set<ZipCode> neighbors;
 	
 	private Date createdAt;

@@ -3,10 +3,12 @@ package com.c.services.ride;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import com.c.domain.location.GeoLocation;
@@ -39,7 +41,7 @@ public class RideAssignmentManager {
 	private OrderRepository orderRepository;
 	
 	@Async
-	public void assignServiceProviderToRideOrder(RideOrder rideOrder) throws AddressValidationException {
+	public Future<Void> assignServiceProviderToRideOrder(RideOrder rideOrder) throws AddressValidationException {
 		GeoLocation startLocation = addressLookupService.getGeoLocationByAddress(rideOrder.getStartLocation().getPostCode(), rideOrder.getStartLocation().getLine1());
 		RideProvider nearestFreeRideProvider = nearestFreeRideProvider(startLocation);
 		List<RideProvider> rideProvidersWithCommonDestination = allRideProvidersWithCommonDestination(rideOrder.getEndLocation().getPostCode());
@@ -48,6 +50,7 @@ public class RideAssignmentManager {
 		RideProvider bestRideProvider = chooseBestRideProvider(startLocation, nearestFreeRideProvider, rideProvidersWithCommonDestination, rideProvidersWithCurrentDestinationInRoute, rideProvidersWithRoutePassingThroughOrigin);
 		rideOrder.setServiceProvider(bestRideProvider);
 		orderRepository.save(rideOrder);
+	    return new AsyncResult<Void>(null);
 	}
 	
 	private RideProvider chooseBestRideProvider(GeoLocation startLocation,
@@ -62,6 +65,10 @@ public class RideAssignmentManager {
 		bestProviderLocation.setLatitude(bestProvider.getGeoLocation().split(",")[0]);
 		bestProviderLocation.setLongitude(bestProvider.getGeoLocation().split(",")[1]);
 		BigDecimal bestProviderDistance = startLocation.distanceFrom(bestProviderLocation);
+		
+		// filter ride providers with common destination so that it only contains
+		// the ones passing through origin of new ride order
+		rideProvidersWithCommonDestination.retainAll(rideProvidersWithRoutePassingThroughOrigin);
 		
 		for ( RideProvider rideProvider : rideProvidersWithCommonDestination) {
 			GeoLocation providerLocation = new GeoLocation();
@@ -88,17 +95,6 @@ public class RideAssignmentManager {
 			}
 		}
 
-		for ( RideProvider rideProvider : rideProvidersWithRoutePassingThroughOrigin) {
-			GeoLocation providerLocation = new GeoLocation();
-			providerLocation.setLatitude(rideProvider.getGeoLocation().split(",")[0]);
-			providerLocation.setLongitude(rideProvider.getGeoLocation().split(",")[1]);
-			BigDecimal distance = startLocation.distanceFrom(providerLocation);
-			
-			if (distance.compareTo(bestProviderDistance) == -1) {
-				bestProviderDistance = distance;
-				bestProvider = rideProvider;
-			}
-		}
 		return bestProvider;
 	}
 	

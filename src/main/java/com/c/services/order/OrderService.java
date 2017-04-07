@@ -65,16 +65,7 @@ public class OrderService {
 	}
 	
 	private Address getAddressEntityFromAddressRequest(AddressRequest addressRequest) {
-		Address ret = new Address();
-		ret.setLine1(addressRequest.getLine1());
-		ret.setLine2(addressRequest.getLine2());
-		ret.setLine3(addressRequest.getLine3());
-		ret.setLine4(addressRequest.getLine4());
-		ret.setCity(addressRequest.getCity());
-		ret.setState(addressRequest.getState());
-		ret.setPostCode(addressRequest.getPostCode());
-		ret.setCountry(addressRequest.getCountry());
-		ret.setLocality(addressRequest.getLocality());
+		Address ret = Address.createPartialAddressFromAddressRequest(addressRequest);
 		ret = addressRepository.save(ret);
 		return ret;
 	}

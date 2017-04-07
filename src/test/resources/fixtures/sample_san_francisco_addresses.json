@@ -1,1 +1,143 @@
-{}
+[{
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "580 california street",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94104",
+    "state": "CA"
+  },
+  {
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "818 41st Ave",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94121",
+    "state": "CA"
+  },
+  {
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "3057 Sacramento St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94115",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "53 Funston Ave",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94129",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "1095 Hyde St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94109",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "24 Willie Mays Plaza",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94107",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "3950 24th St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94114",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "4001 Judah St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94122",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "1128 Taraval St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94116",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "2814 19th St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94110",
+    "state": "CA"
+  },
+  {  
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "2495 3rd St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94107",
+    "state": "CA"
+  },
+  {
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "2815 Diamond St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94131",
+    "state": "CA"
+  },
+  {
+    "city": "San Francisco",
+    "country": "us",
+    "line1": "2036 Lombard St",
+    "line2": "",
+    "line3": "",
+    "line4": "",
+    "locality": "",
+    "postCode": "94123",
+    "state": "CA"
+  }]

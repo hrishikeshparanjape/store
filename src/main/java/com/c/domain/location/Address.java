@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.c.controllers.orders.AddressRequest;
+
 @Entity
 public class Address {
 
@@ -38,7 +40,21 @@ public class Address {
 	private Date createdAt;
 
 	private Date updatedAt;
-
+	
+	public static final Address createPartialAddressFromAddressRequest(AddressRequest addressRequest) {
+		Address ret = new Address();
+		ret.setLine1(addressRequest.getLine1());
+		ret.setLine2(addressRequest.getLine2());
+		ret.setLine3(addressRequest.getLine3());
+		ret.setLine4(addressRequest.getLine4());
+		ret.setCity(addressRequest.getCity());
+		ret.setState(addressRequest.getState());
+		ret.setPostCode(addressRequest.getPostCode());
+		ret.setCountry(addressRequest.getCountry());
+		ret.setLocality(addressRequest.getLocality());
+		return ret;
+	}
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
