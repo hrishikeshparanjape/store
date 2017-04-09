@@ -10,7 +10,7 @@ public class ReportLocationRequest {
 	private String postCode;
 
 	@NotNull
-	private Boolean isOnline;
+	private Boolean online;
 	
 	public String getGeoLocation() {
 		return geoLocation;
@@ -20,12 +20,12 @@ public class ReportLocationRequest {
 		this.geoLocation = geoLocation;
 	}
 
-	public boolean isOnline() {
-		return isOnline;
+	public boolean getOnline() {
+		return online;
 	}
 
 	public void setOnline(boolean isOnline) {
-		this.isOnline = isOnline;
+		this.online = isOnline;
 	}
 
 	public String getPostCode() {
@@ -34,13 +34,5 @@ public class ReportLocationRequest {
 
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
-	}
-
-	public Boolean getIsOnline() {
-		return isOnline;
-	}
-
-	public void setIsOnline(Boolean isOnline) {
-		this.isOnline = isOnline;
 	}
 }
