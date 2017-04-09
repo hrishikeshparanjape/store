@@ -5,12 +5,15 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotNull;
 
 import com.c.domain.location.Address;
 import com.c.domain.location.RideProvider;
@@ -29,6 +32,10 @@ public class RideOrder {
     private Date createdAt;
     
     private Date updatedAt;
+    
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private RideStatus status;
     
     @ManyToOne
     private Customer customer;
@@ -117,5 +124,13 @@ public class RideOrder {
 
 	public void setEndLocation(Address endLocation) {
 		this.endLocation = endLocation;
+	}
+	
+	public RideStatus getStatus() {
+		return status;
+	}
+	
+	public void setStatus(RideStatus status) {
+		this.status = status;
 	}
 }

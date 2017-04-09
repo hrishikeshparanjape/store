@@ -21,6 +21,7 @@ import com.c.controllers.orders.AddressRequest;
 import com.c.domain.location.Address;
 import com.c.domain.location.RideProvider;
 import com.c.domain.order.RideOrder;
+import com.c.domain.order.RideStatus;
 import com.c.domain.user.Customer;
 import com.c.repositories.AddressRepository;
 import com.c.repositories.CustomerRepository;
@@ -86,6 +87,7 @@ public class StoreTestUtils {
 		ret.setPaymentServiceId(randomAlphaNumericString());
 		ret.setStartLocation(createTestAddress());
 		ret.setEndLocation(createTestAddress());
+		ret.setStatus(RideStatus.NEW);
 		ret = orderRepository.save(ret);
 		return ret;
 	}

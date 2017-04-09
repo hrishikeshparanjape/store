@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +46,18 @@ public class OrderController {
 		}
 	}
 	
+	@RequestMapping(path="/order/{id}/cancel", method=RequestMethod.POST)
+	public void cancelOrder(@PathVariable String id) throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isAuthenticated(auth)) {
+			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+			orderService.cancelOrder(id, customerEmailAddress);
+		} else {
+			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+		}
+	}
+
 	private boolean isAuthenticated(Authentication auth) {
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for(GrantedAuthority authority : authorities) {

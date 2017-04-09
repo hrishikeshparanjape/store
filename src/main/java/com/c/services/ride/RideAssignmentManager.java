@@ -15,6 +15,7 @@ import com.c.domain.location.GeoLocation;
 import com.c.domain.location.RideProvider;
 import com.c.domain.location.ZipCode;
 import com.c.domain.order.RideOrder;
+import com.c.domain.order.RideStatus;
 import com.c.exceptions.AddressValidationException;
 import com.c.repositories.OrderRepository;
 import com.c.repositories.RideProviderRepository;
@@ -48,8 +49,16 @@ public class RideAssignmentManager {
 		List<RideProvider> rideProvidersWithCurrentDestinationInRoute = allRideProvidersWithCurrentDestinationInRoute(rideOrder.getEndLocation().getPostCode());
 		List<RideProvider> rideProvidersWithRoutePassingThroughOrigin = allRideProvidersWithRoutePassingThroughOrigin(rideOrder.getStartLocation().getPostCode());
 		RideProvider bestRideProvider = chooseBestRideProvider(startLocation, nearestFreeRideProvider, rideProvidersWithCommonDestination, rideProvidersWithCurrentDestinationInRoute, rideProvidersWithRoutePassingThroughOrigin);
-		rideOrder.setServiceProvider(bestRideProvider);
-		orderRepository.save(rideOrder);
+		if (bestRideProvider == null) {
+			rideOrder.setStatus(RideStatus.CANNOT_BE_ASSIGNED);
+			orderRepository.save(rideOrder);
+		} else {
+			rideOrder.setStatus(RideStatus.ASSIGNED);
+			rideOrder.setServiceProvider(bestRideProvider);
+			orderRepository.save(rideOrder);
+			bestRideProvider.getRidesInProgress().add(rideOrder);
+			rideProviderRepository.save(bestRideProvider);
+		}
 	    return new AsyncResult<Void>(null);
 	}
 	
@@ -100,7 +109,8 @@ public class RideAssignmentManager {
 	
 	private RideProvider nearestFreeRideProvider(GeoLocation start) {
 		List<RideProvider> onlineRideProviders = rideProviderRepository.findByIsOnline(true);
-		BigDecimal minDistance = BigDecimal.valueOf(Long.MAX_VALUE);
+		//no more than five miles away
+		BigDecimal minDistance = BigDecimal.valueOf(5);
 		RideProvider bestRideProvider = null;
 		for (RideProvider provider : onlineRideProviders) {
 			if (provider.getRidesInProgress().isEmpty()) {
