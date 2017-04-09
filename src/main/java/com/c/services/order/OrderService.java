@@ -10,6 +10,7 @@ import com.c.controllers.orders.AddressRequest;
 import com.c.domain.location.Address;
 import com.c.domain.location.GeoLocation;
 import com.c.domain.order.RideOrder;
+import com.c.domain.order.RideStatus;
 import com.c.domain.user.Customer;
 import com.c.exceptions.AddressValidationException;
 import com.c.repositories.AddressRepository;
@@ -59,6 +60,7 @@ public class OrderService {
 		order.setCustomer(customer);
 		order.setStartLocation(getAddressEntityFromAddressRequest(rideStartPoint));
 		order.setEndLocation(getAddressEntityFromAddressRequest(rideFinishPoint));
+		order.setStatus(RideStatus.NEW);
 		order = orderRepository.save(order);
 		rideAssignmentManager.assignServiceProviderToRideOrder(order);
 		return order;
@@ -97,5 +99,20 @@ public class OrderService {
 			customerRepository.save(customer);
 		}
 		return customer.getPaymentServiceId();
+	}
+
+	public void cancelOrder(String id, String customerEmailAddress) throws Exception {
+		Customer customer = customerRepository.findByEmail(customerEmailAddress);
+		RideOrder orderToCancel = orderRepository.findOne(Long.valueOf(id));
+		if (orderToCancel.getCustomer().getId() == customer.getId()) {
+			if (orderToCancel.getStatus() == RideStatus.NEW || orderToCancel.getStatus() == RideStatus.ASSIGNED) {
+				orderToCancel.setStatus(RideStatus.CANCELLED);
+				orderRepository.save(orderToCancel);
+			} else {
+				throw new Exception("Cannot be cancelled");
+			}
+		} else {
+			throw new Exception("Cannot cancel someone else's order");
+		}
 	}
 }
