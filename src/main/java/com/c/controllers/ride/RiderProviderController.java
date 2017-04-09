@@ -52,7 +52,7 @@ public class RiderProviderController {
 				}
 				rideProvider.setGeoLocation(reportLocationRequest.getGeoLocation());
 				rideProvider.setPostCode(reportLocationRequest.getPostCode());
-				rideProvider.setOnline(reportLocationRequest.isOnline());
+				rideProvider.setOnline(reportLocationRequest.getOnline());
 				rideProviderRepository.save(rideProvider);				
 			} else {
 				throw new UnauthorizedUserException("User not authorized");
