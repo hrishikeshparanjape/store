@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.c.controllers.orders.AddressRequest;
 import com.c.domain.location.Address;
 import com.c.domain.location.GeoLocation;
+import com.c.domain.location.RideProvider;
 import com.c.domain.order.RideOrder;
 import com.c.domain.order.RideStatus;
 import com.c.domain.user.Customer;
@@ -16,6 +17,7 @@ import com.c.exceptions.AddressValidationException;
 import com.c.repositories.AddressRepository;
 import com.c.repositories.CustomerRepository;
 import com.c.repositories.OrderRepository;
+import com.c.repositories.RideProviderRepository;
 import com.c.services.location.IAddressLookupService;
 import com.c.services.ride.RideAssignmentManager;
 import com.stripe.exception.APIConnectionException;
@@ -35,6 +37,9 @@ public class OrderService {
 
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private RideProviderRepository rideProviderRepository;
 
 	@Autowired
 	private OrderRepository orderRepository;
@@ -108,11 +113,44 @@ public class OrderService {
 			if (orderToCancel.getStatus() == RideStatus.NEW || orderToCancel.getStatus() == RideStatus.ASSIGNED) {
 				orderToCancel.setStatus(RideStatus.CANCELLED);
 				orderRepository.save(orderToCancel);
+				stripePaymentService.cancelOrder(orderToCancel.getPaymentServiceId());
 			} else {
 				throw new Exception("Cannot be cancelled");
 			}
 		} else {
 			throw new Exception("Cannot cancel someone else's order");
+		}
+	}
+	
+	public void startOrder(String orderId, String providerEmail) throws Exception {
+		RideProvider rideProvider = rideProviderRepository.findByCustomerEmail(providerEmail);
+		RideOrder orderToStart = orderRepository.findOne(Long.valueOf(orderId));
+		if (orderToStart.getServiceProvider().getId() == rideProvider.getId()) {
+			if (orderToStart.getStatus() == RideStatus.ASSIGNED) {
+				orderToStart.setStatus(RideStatus.STARTED);
+				orderRepository.save(orderToStart);
+				stripePaymentService.payOrder(orderToStart.getPaymentServiceId(), orderToStart.getCustomer().getPaymentServiceId());
+			} else {
+				throw new Exception("Cannot be started, wrong status");
+			}
+		} else {
+			throw new Exception("Cannot be started, wrong ride provider");
+		}
+	}
+
+	public void completeOrder(String orderId, String providerEmail) throws Exception {
+		RideProvider rideProvider = rideProviderRepository.findByCustomerEmail(providerEmail);
+		RideOrder orderToComplete = orderRepository.findOne(Long.valueOf(orderId));
+		if (orderToComplete.getServiceProvider().getId() == rideProvider.getId()) {
+			if (orderToComplete.getStatus() == RideStatus.STARTED) {
+				orderToComplete.setStatus(RideStatus.COMPLETED);
+				orderRepository.save(orderToComplete);
+				stripePaymentService.fulfilOrder(orderToComplete.getPaymentServiceId());
+			} else {
+				throw new Exception("Cannot be started, wrong status");
+			}
+		} else {
+			throw new Exception("Cannot be started, wrong ride provider");
 		}
 	}
 }

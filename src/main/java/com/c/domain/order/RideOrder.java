@@ -133,4 +133,10 @@ public class RideOrder {
 	public void setStatus(RideStatus status) {
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return "RideOrder [id=" + id + ", paymentServiceId=" + paymentServiceId + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", status=" + status + ", customer=" + customer + ", startLocation=" + startLocation + ", endLocation=" + endLocation + "]";
+	}
 }

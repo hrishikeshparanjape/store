@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -25,6 +27,8 @@ import com.c.services.location.RouteService;
 
 @Service
 public class RideAssignmentManager {
+	
+	private static final Logger log = LoggerFactory.getLogger(RideAssignmentManager.class);
 	
 	@Autowired
 	private RouteService routeService;
@@ -48,7 +52,15 @@ public class RideAssignmentManager {
 		List<RideProvider> rideProvidersWithCommonDestination = allRideProvidersWithCommonDestination(rideOrder.getEndLocation().getPostCode());
 		List<RideProvider> rideProvidersWithCurrentDestinationInRoute = allRideProvidersWithCurrentDestinationInRoute(rideOrder.getEndLocation().getPostCode());
 		List<RideProvider> rideProvidersWithRoutePassingThroughOrigin = allRideProvidersWithRoutePassingThroughOrigin(rideOrder.getStartLocation().getPostCode());
-		RideProvider bestRideProvider = chooseBestRideProvider(startLocation, nearestFreeRideProvider, rideProvidersWithCommonDestination, rideProvidersWithCurrentDestinationInRoute, rideProvidersWithRoutePassingThroughOrigin);
+		RideProvider bestRideProvider = null;
+		
+		try {
+			bestRideProvider = chooseBestRideProvider(startLocation, nearestFreeRideProvider, rideProvidersWithCommonDestination, rideProvidersWithCurrentDestinationInRoute, rideProvidersWithRoutePassingThroughOrigin);
+		} catch (Exception e) {
+			log.error("Exception in finding best ride provider: riderOrder=" + rideOrder.toString() + ", exception=", e);
+			throw e;
+		}
+		
 		if (bestRideProvider == null) {
 			rideOrder.setStatus(RideStatus.CANNOT_BE_ASSIGNED);
 			orderRepository.save(rideOrder);

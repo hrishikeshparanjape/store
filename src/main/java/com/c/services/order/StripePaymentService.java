@@ -69,6 +69,14 @@ public class StripePaymentService {
 		return ret.getId();
 	}
 	
+	public void cancelOrder(String paymentServiceId) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+		Stripe.apiKey = stripeApiKey;
+		Order order = Order.retrieve(paymentServiceId);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("status", "canceled");
+		order.update(params);
+	}
+	
 	public String payOrder(String orderPaymentServiceId, String customerPaymentServiceId) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Stripe.apiKey = stripeApiKey;
 
@@ -77,6 +85,14 @@ public class StripePaymentService {
 		orderPayParams.put("customer", customerPaymentServiceId);
 		Order ret = order.pay(orderPayParams);
 		return ret.getId();
+	}
+
+	public void fulfilOrder(String paymentServiceId) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+		Stripe.apiKey = stripeApiKey;
+		Order order = Order.retrieve(paymentServiceId);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("status", "fulfilled");
+		order.update(params);
 	}
 
 }

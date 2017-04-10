@@ -95,4 +95,10 @@ public class Customer {
 	public void setRoles(String roles) {
 		this.roles = roles;
 	}
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", email=" + email + ", paymentServiceId=" + paymentServiceId + ", roles=" + roles
+				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
 }
