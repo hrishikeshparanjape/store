@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.c.domain.user.Customer;
 import com.c.exceptions.AddressValidationException;
+import com.c.repositories.CustomerRepository;
 import com.c.services.order.OrderService;
 import com.c.services.user.FacebookGraphApiClient;
 import com.stripe.exception.APIConnectionException;
@@ -31,6 +34,9 @@ public class OrderController {
 	
 	@Autowired
 	private FacebookGraphApiClient facebookGraphApiClient;
+	
+	@Autowired
+	private CustomerRepository customerRepository;
 	
 	@RequestMapping(path="/order", method=RequestMethod.POST)
 	public CreateOrderResponse createOrder(@RequestBody CreateOrderRequest createSubscriptionRequest) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
@@ -56,6 +62,43 @@ public class OrderController {
 		} else {
 			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
 		}
+	}
+	
+	@RequestMapping(path="/order/{id}/start", method=RequestMethod.POST)
+	public void startRide(@PathVariable String id) throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isAuthenticated(auth)) {
+			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+			if (isAuthorized(customerEmailAddress, "ROLE_DRIVER")) {
+				orderService.startOrder(id, customerEmailAddress);
+			} else {
+				throw new UnauthorizedUserException("User not authorized");
+			}
+		} else {
+			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+		}
+	}
+
+	@RequestMapping(path="/order/{id}/complete", method=RequestMethod.POST)
+	public void completeRide(@PathVariable String id) throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isAuthenticated(auth)) {
+			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+			if (isAuthorized(customerEmailAddress, "ROLE_DRIVER")) {
+				orderService.completeOrder(id, customerEmailAddress);
+			} else {
+				throw new UnauthorizedUserException("User not authorized");
+			}
+		} else {
+			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+		}
+	}
+
+	private boolean isAuthorized(String email, String role) {
+		Customer c = customerRepository.findByEmail(email);
+		return c.getRoles().contains(role);
 	}
 
 	private boolean isAuthenticated(Authentication auth) {
