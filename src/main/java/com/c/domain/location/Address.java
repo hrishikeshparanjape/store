@@ -156,4 +156,10 @@ public class Address {
 		this.locality = locality;
 	}
 
+	@Override
+	public String toString() {
+		return "Address [id=" + id + ", line1=" + line1 + ", line2=" + line2 + ", line3=" + line3 + ", line4=" + line4
+				+ ", city=" + city + ", postCode=" + postCode + ", state=" + state + ", country=" + country
+				+ ", locality=" + locality + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
 }
