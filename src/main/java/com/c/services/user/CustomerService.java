@@ -32,7 +32,7 @@ public class CustomerService {
 			customer.setRoles("ROLE_USER");
 			customerRepository.save(customer);
 			try {
-				emailService.sendWelcomeEmail(email, email, Locale.ENGLISH);
+				emailService.sendWelcomeEmail(email, Locale.ENGLISH);
 			} catch (Exception e) {
 				log.error("Error sending email: email=" + email + ", exception=", e);
 			}
