@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:remove="all">Welcome</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <p>
+            Hello,
+        </p>
+        <p>
+            You have been successfully subscribed to the <b>Fake newsletter</b> on
+            <span th:text="${#dates.format(subscriptionDate)}">28-12-2012</span>
+        </p>
+        <p>
+            Regards, <br />
+            &emsp; <em>The Thymeleaf Team</em>
+        </p>
+    </body>
+</html>
