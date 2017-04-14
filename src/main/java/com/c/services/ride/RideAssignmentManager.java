@@ -47,6 +47,7 @@ public class RideAssignmentManager {
 	
 	@Async
 	public Future<Void> assignServiceProviderToRideOrder(RideOrder rideOrder) throws AddressValidationException {
+		log.info("finding best ride provider: riderOrder=" + rideOrder.toString());
 		GeoLocation startLocation = addressLookupService.getGeoLocationByAddress(rideOrder.getStartLocation().getPostCode(), rideOrder.getStartLocation().getLine1());
 		RideProvider nearestFreeRideProvider = nearestFreeRideProvider(startLocation);
 		List<RideProvider> rideProvidersWithCommonDestination = allRideProvidersWithCommonDestination(rideOrder.getEndLocation().getPostCode());
