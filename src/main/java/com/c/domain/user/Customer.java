@@ -2,6 +2,8 @@ package com.c.domain.user;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -94,6 +96,19 @@ public class Customer {
 	
 	public void setRoles(String roles) {
 		this.roles = roles;
+	}
+
+	public Set<CustomerRole> getCustomerRoles() {
+		Set<CustomerRole> ret = new HashSet<CustomerRole>();
+		String[] allRoles = roles.split(",");
+		for (int i=0; i< allRoles.length; i++) {
+			ret.add(CustomerRole.valueOf(allRoles[i]));
+		}
+		return ret;
+	}
+
+	public void addCustomerRole(CustomerRole role) {
+		roles = roles + "," + role.toString();
 	}
 
 	@Override

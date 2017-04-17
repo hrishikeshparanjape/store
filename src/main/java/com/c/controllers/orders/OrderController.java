@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c.domain.user.Customer;
+import com.c.domain.user.CustomerRole;
 import com.c.exceptions.AddressValidationException;
 import com.c.repositories.CustomerRepository;
 import com.c.services.order.OrderService;
@@ -70,7 +71,7 @@ public class OrderController {
 		if (isAuthenticated(auth)) {
 			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
-			if (isAuthorized(customerEmailAddress, "ROLE_DRIVER")) {
+			if (isAuthorized(customerEmailAddress, CustomerRole.ROLE_RIDE_PROVIDER)) {
 				orderService.startOrder(id, customerEmailAddress);
 			} else {
 				throw new UnauthorizedUserException("User not authorized");
@@ -86,7 +87,7 @@ public class OrderController {
 		if (isAuthenticated(auth)) {
 			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
-			if (isAuthorized(customerEmailAddress, "ROLE_DRIVER")) {
+			if (isAuthorized(customerEmailAddress, CustomerRole.ROLE_RIDE_PROVIDER)) {
 				orderService.completeOrder(id, customerEmailAddress);
 			} else {
 				throw new UnauthorizedUserException("User not authorized");
@@ -96,9 +97,9 @@ public class OrderController {
 		}
 	}
 
-	private boolean isAuthorized(String email, String role) {
+	private boolean isAuthorized(String email, CustomerRole roleRideProvider) {
 		Customer c = customerRepository.findByEmail(email);
-		return c.getRoles().contains(role);
+		return c.getCustomerRoles().contains(roleRideProvider);
 	}
 
 	private boolean isAuthenticated(Authentication auth) {

@@ -23,6 +23,7 @@ import com.c.domain.location.RideProvider;
 import com.c.domain.order.RideOrder;
 import com.c.domain.order.RideStatus;
 import com.c.domain.user.Customer;
+import com.c.domain.user.CustomerRole;
 import com.c.repositories.AddressRepository;
 import com.c.repositories.CustomerRepository;
 import com.c.repositories.OrderRepository;
@@ -70,7 +71,7 @@ public class StoreTestUtils {
 		Customer ret = new Customer();
 		ret.setEmail(randomAlphaNumericString() + "@test.com");
 		ret.setPaymentServiceId(randomAlphaNumericString());
-		ret.setRoles("ROLE_USER");
+		ret.setRoles(CustomerRole.ROLE_USER.toString());
 		ret = customerRepository.save(ret);
 		return ret;
 	}

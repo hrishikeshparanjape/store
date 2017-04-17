@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.c.domain.user.Customer;
+import com.c.domain.user.CustomerRole;
 import com.c.repositories.CustomerRepository;
 import com.c.services.email.EmailService;
 
@@ -29,7 +30,7 @@ public class CustomerService {
 		if (customer == null) {
 			customer = new Customer();
 			customer.setEmail(email);
-			customer.setRoles("ROLE_USER");
+			customer.setRoles(CustomerRole.ROLE_USER.toString());
 			customerRepository.save(customer);
 			try {
 				emailService.sendWelcomeEmail(email, Locale.ENGLISH);
@@ -43,14 +44,11 @@ public class CustomerService {
 	public Customer markCustomerAsDriver(String email) throws EntityNotFoundException {
 		Customer customer = customerRepository.findByEmail(email);
 		if (customer != null) {
-			String roles = customer.getRoles();
-			roles = roles + "," + "ROLE_DRIVER";
-			customer.setRoles(roles);
+			customer.addCustomerRole(CustomerRole.ROLE_RIDE_PROVIDER);
 			customer = customerRepository.save(customer);
 			return customer;
 		} else {
 			throw new EntityNotFoundException("customer record not found: email=" + email);
 		}
-		
 	}
 }
