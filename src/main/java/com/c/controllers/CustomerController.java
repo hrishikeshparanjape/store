@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.c.controllers.orders.CreateOrderRequest;
 import com.c.domain.user.Customer;
 import com.c.domain.user.CustomerRole;
 import com.c.repositories.CustomerRepository;
