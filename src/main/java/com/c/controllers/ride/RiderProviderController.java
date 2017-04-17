@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.c.domain.location.RideProvider;
 import com.c.domain.order.RideOrder;
 import com.c.domain.user.Customer;
+import com.c.domain.user.CustomerRole;
 import com.c.repositories.CustomerRepository;
 import com.c.repositories.RideProviderRepository;
 import com.c.services.user.FacebookGraphApiClient;
@@ -41,10 +42,10 @@ public class RiderProviderController {
 		if (isAuthenticated(auth)) {
 			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
-			Customer customer = customerRepository.findByEmail(customerEmailAddress);
-			if (isAuthorized(customer)) {
+			if (isAuthorized(customerEmailAddress, CustomerRole.ROLE_RIDE_PROVIDER)) {
 				RideProvider rideProvider = rideProviderRepository.findByCustomerEmail(customerEmailAddress);
 				if (rideProvider == null) {
+					Customer customer = customerRepository.findByEmail(customerEmailAddress);
 					rideProvider = new RideProvider();
 					rideProvider.setCustomer(customer);
 					rideProvider.setCapacity(BigInteger.valueOf(3));
@@ -62,12 +63,27 @@ public class RiderProviderController {
 		}
 	}
 	
-	private boolean isAuthorized(Customer customer) {
-		if (customer != null) {
-			return customer.getRoles().contains("ROLE_RIDE_PROVIDER");
+	@RequestMapping(path="/rideProviderProfile", method=RequestMethod.GET)
+	public RideProvider getRideProviderInfo(@RequestBody ReportLocationRequest reportLocationRequest) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isAuthenticated(auth)) {
+			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+			if (isAuthorized(customerEmailAddress, CustomerRole.ROLE_RIDE_PROVIDER)) {
+				return rideProviderRepository.findByCustomerEmail(customerEmailAddress);
+			} else {
+				throw new UnauthorizedUserException("User not authorized");
+			}
 		} else {
-			return false;
+			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
 		}
+
+
+	}
+	
+	private boolean isAuthorized(String email, CustomerRole roleRideProvider) {
+		Customer c = customerRepository.findByEmail(email);
+		return c.getCustomerRoles().contains(roleRideProvider);
 	}
 	
 	private boolean isAuthenticated(Authentication auth) {
