@@ -64,7 +64,7 @@ public class RiderProviderController {
 	}
 	
 	@RequestMapping(path="/rideProviderProfile", method=RequestMethod.GET)
-	public RideProvider getRideProviderInfo(@RequestBody ReportLocationRequest reportLocationRequest) {
+	public RideProvider getRideProviderInfo() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
 			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
