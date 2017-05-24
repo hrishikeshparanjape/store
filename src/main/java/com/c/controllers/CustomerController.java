@@ -3,6 +3,8 @@ package com.c.controllers;
 import java.security.Principal;
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,7 @@ import com.c.domain.user.CustomerRole;
 import com.c.repositories.CustomerRepository;
 import com.c.services.user.CustomerService;
 import com.c.services.user.FacebookGraphApiClient;
+import com.c.services.user.PreAuthenticatedFacebookUserAuthenticationToken;
 
 @RestController
 public class CustomerController {
@@ -39,6 +42,16 @@ public class CustomerController {
 		String facebookToken = ((OAuth2AuthenticationDetails)((OAuth2Authentication) principal).getDetails()).getTokenValue();
 		String emailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 		Customer ret = customerService.signupOrSignInCustomer(emailAddress);
+		return ret;
+	}
+	
+	@RequestMapping(path="/login/preauth/facebook", method=RequestMethod.POST)
+	public Customer preAuth(@Valid @RequestBody FacebookPreAuthRequest facebookPreAuthRequest) {
+		String facebookToken = facebookPreAuthRequest.getToken();
+		String emailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+		Customer ret = customerService.signupOrSignInCustomer(emailAddress);
+		PreAuthenticatedFacebookUserAuthenticationToken preAuthenticatedFacebookUserAuthenticationToken = new PreAuthenticatedFacebookUserAuthenticationToken(ret, facebookPreAuthRequest.getToken());
+		SecurityContextHolder.getContext().setAuthentication(preAuthenticatedFacebookUserAuthenticationToken);
 		return ret;
 	}
 	

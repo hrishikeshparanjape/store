@@ -21,6 +21,7 @@ import com.c.exceptions.AddressValidationException;
 import com.c.repositories.CustomerRepository;
 import com.c.services.order.OrderService;
 import com.c.services.user.FacebookGraphApiClient;
+import com.c.services.user.PreAuthenticatedFacebookUserAuthenticationToken;
 import com.stripe.exception.APIConnectionException;
 import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
@@ -43,7 +44,7 @@ public class OrderController {
 	public CreateOrderResponse createOrder(@RequestBody CreateOrderRequest createSubscriptionRequest) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
-			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 			CreateOrderResponse ret = new CreateOrderResponse();
 			ret.setOrder(orderService.createNewOrder(createSubscriptionRequest.getStart(), createSubscriptionRequest.getEnd(), customerEmailAddress));
@@ -57,7 +58,7 @@ public class OrderController {
 	public void cancelOrder(@PathVariable String id) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
-			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 			orderService.cancelOrder(id, customerEmailAddress);
 		} else {
@@ -69,7 +70,7 @@ public class OrderController {
 	public void startRide(@PathVariable String id) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
-			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 			if (isAuthorized(customerEmailAddress, CustomerRole.ROLE_RIDE_PROVIDER)) {
 				orderService.startOrder(id, customerEmailAddress);
@@ -85,7 +86,7 @@ public class OrderController {
 	public void completeRide(@PathVariable String id) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
-			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 			if (isAuthorized(customerEmailAddress, CustomerRole.ROLE_RIDE_PROVIDER)) {
 				orderService.completeOrder(id, customerEmailAddress);
@@ -111,4 +112,15 @@ public class OrderController {
 		}
 		return false;
 	}
+	
+	private String getFacebookTokenFromAuthentication(Authentication auth) {
+		String facebookToken = null;
+		if(auth instanceof PreAuthenticatedFacebookUserAuthenticationToken) {
+			facebookToken = (String) ((PreAuthenticatedFacebookUserAuthenticationToken) auth).getDetails();
+		} else {
+			facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+		}
+		return facebookToken;
+	}
+
 }

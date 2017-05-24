@@ -30,11 +30,12 @@ public class FacebookConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests()
-			.antMatchers("/login**", "/swagger**", "/configuration/**", "/v2/api-docs**").permitAll()
+			.antMatchers("/login**", "/swagger**", "/configuration/**", "/v2/api-docs**", "/login/preauth/facebook").permitAll()
 			.anyRequest()
 			.authenticated()
 			.and().logout().logoutSuccessUrl("/").permitAll()
-			.and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+			.and().csrf().ignoringAntMatchers("/login/preauth/facebook")
+			.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 			.and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
 	}
 	

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.c.services.payment.CreditCardService;
 import com.c.services.user.FacebookGraphApiClient;
+import com.c.services.user.PreAuthenticatedFacebookUserAuthenticationToken;
 import com.stripe.exception.APIConnectionException;
 import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
@@ -36,7 +37,7 @@ public class PaymentController {
 	public ResponseEntity<Void> createPaymentMethod(@RequestBody CreatePaymentMethodRequest createPaymentMethodRequest) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
-			String facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
 			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 			if ("card".equals(createPaymentMethodRequest.getType())) {
 				creditCardService.addNewCreditCard(customerEmailAddress, createPaymentMethodRequest.getData());
@@ -47,6 +48,16 @@ public class PaymentController {
 		} else {
 			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
 		}
+	}
+	
+	private String getFacebookTokenFromAuthentication(Authentication auth) {
+		String facebookToken = null;
+		if(auth instanceof PreAuthenticatedFacebookUserAuthenticationToken) {
+			facebookToken = (String) ((PreAuthenticatedFacebookUserAuthenticationToken) auth).getDetails();
+		} else {
+			facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+		}
+		return facebookToken;
 	}
 	
 	private boolean isAuthenticated(Authentication auth) {
