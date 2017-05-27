@@ -16,6 +16,10 @@ import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Customer;
 import com.stripe.model.ExternalAccount;
 import com.stripe.model.Order;
+import com.stripe.model.Product;
+import com.stripe.model.ProductCollection;
+import com.stripe.model.SKU;
+import com.stripe.model.SKUCollection;
 
 @Service
 public class StripePaymentService {
@@ -67,6 +71,22 @@ public class StripePaymentService {
 		
 		Order ret = Order.create(orderParams);
 		return ret.getId();
+	}
+	
+	public Integer getProductPriceBySkuString(String skuString) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+		Stripe.apiKey = stripeApiKey;
+		ProductCollection productCollection = Product.list(null);
+		List<Product> products = productCollection.getData();
+		for(Product product : products) {
+			SKUCollection skuColletion = product.getSkus();
+			List<SKU> skus = skuColletion.getData();
+			for(SKU sku : skus) {
+				if (skuString.equals(sku.getId())) {
+					return sku.getPrice();
+				}
+			}
+		}
+		return null;
 	}
 	
 	public void cancelOrder(String paymentServiceId) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import com.c.domain.location.Address;
@@ -48,6 +49,17 @@ public class RideOrder {
     
     @ManyToOne
     private Address endLocation;
+    
+    @Transient
+    private Integer price;
+    
+    public Integer getPrice() {
+		return price;
+	}
+    
+    public void setPrice(Integer price) {
+		this.price = price;
+	}
 
     @PrePersist
     public void preCreate() {

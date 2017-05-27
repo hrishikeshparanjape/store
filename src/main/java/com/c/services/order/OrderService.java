@@ -71,6 +71,24 @@ public class OrderService {
 		return order;
 	}
 	
+	public RideOrder getOrderPreview(AddressRequest rideStartPoint, AddressRequest rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+		Customer customer = customerRepository.findByEmail(customerEmailAddress);
+		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint.getPostCode(), rideStartPoint.getLine1());
+		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint.getPostCode(), rideFinishPoint.getLine1());
+		RideOrder order = new RideOrder();
+		
+		String productSku = getProductSku(start.distanceFrom(end));
+		
+		order.setPaymentServiceId(null);
+		order.setCustomer(customer);
+		order.setStartLocation(getAddressEntityFromAddressRequest(rideStartPoint));
+		order.setEndLocation(getAddressEntityFromAddressRequest(rideFinishPoint));
+		order.setStatus(RideStatus.NEW);
+		order.setPrice(stripePaymentService.getProductPriceBySkuString(productSku));
+		
+		return order;
+	}
+	
 	private Address getAddressEntityFromAddressRequest(AddressRequest addressRequest) {
 		Address ret = Address.createPartialAddressFromAddressRequest(addressRequest);
 		ret = addressRepository.save(ret);
