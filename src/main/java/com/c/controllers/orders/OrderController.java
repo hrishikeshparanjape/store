@@ -53,7 +53,21 @@ public class OrderController {
 			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
 		}
 	}
-	
+
+	@RequestMapping(path="/order/preview", method=RequestMethod.POST)
+	public CreateOrderResponse getOrderPreview(@RequestBody CreateOrderRequest createSubscriptionRequest) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isAuthenticated(auth)) {
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
+			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+			CreateOrderResponse ret = new CreateOrderResponse();
+			ret.setOrder(orderService.getOrderPreview(createSubscriptionRequest.getStart(), createSubscriptionRequest.getEnd(), customerEmailAddress));
+			return ret;
+		} else {
+			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+		}
+	}
+
 	@RequestMapping(path="/order/{id}/cancel", method=RequestMethod.POST)
 	public void cancelOrder(@PathVariable String id) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
