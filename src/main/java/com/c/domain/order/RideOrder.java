@@ -50,6 +50,10 @@ public class RideOrder {
     @ManyToOne
     private Address endLocation;
     
+    private String geoLocationStart;
+    
+    private String geoLocationEnd;
+    
     @Transient
     private Integer price;
     
@@ -144,6 +148,22 @@ public class RideOrder {
 	
 	public void setStatus(RideStatus status) {
 		this.status = status;
+	}
+
+	public String getGeoLocationStart() {
+		return geoLocationStart;
+	}
+
+	public void setGeoLocationStart(String geoLocationStart) {
+		this.geoLocationStart = geoLocationStart;
+	}
+
+	public String getGeoLocationEnd() {
+		return geoLocationEnd;
+	}
+
+	public void setGeoLocationEnd(String geoLocationEnd) {
+		this.geoLocationEnd = geoLocationEnd;
 	}
 
 	@Override
