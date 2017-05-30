@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.c.domain.order.RideOrder;
 import com.c.domain.user.Customer;
 import com.c.domain.user.CustomerRole;
 import com.c.exceptions.AddressValidationException;
@@ -49,6 +50,25 @@ public class OrderController {
 			CreateOrderResponse ret = new CreateOrderResponse();
 			ret.setOrder(orderService.createNewOrder(createSubscriptionRequest.getStart(), createSubscriptionRequest.getEnd(), customerEmailAddress));
 			return ret;
+		} else {
+			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+		}
+	}
+
+	@RequestMapping(path="/order/{id}", method=RequestMethod.GET)
+	public CreateOrderResponse getOrder(@PathVariable Long id) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isAuthenticated(auth)) {
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
+			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+			RideOrder order = orderService.getOrder(id);
+			if (customerEmailAddress.equals(order.getCustomer().getEmail())) {
+				CreateOrderResponse ret = new CreateOrderResponse();
+				ret.setOrder(order);
+				return ret;
+			} else {
+				throw new UnauthorizedUserException("User not authorized");
+			}
 		} else {
 			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
 		}

@@ -2,6 +2,7 @@ package com.c.services.order;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,12 +50,18 @@ public class OrderService {
 	
 	@Autowired
 	private RideAssignmentManager rideAssignmentManager;
+	
+	public List<RideOrder> getOrdersByCustomer(String customerEmailAddress) {
+		return orderRepository.findByCustomerEmail(customerEmailAddress);
+	}
 
 	public RideOrder createNewOrder(AddressRequest rideStartPoint, AddressRequest rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Customer customer = customerRepository.findByEmail(customerEmailAddress);
 		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint.getPostCode(), rideStartPoint.getLine1());
 		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint.getPostCode(), rideFinishPoint.getLine1());
 		RideOrder order = new RideOrder();
+		order.setGeoLocationStart(start.getLatitude() + "," + start.getLongitude());
+		order.setGeoLocationEnd(end.getLatitude() + "," + end.getLongitude());
 		
 		String customerPaymentServiceId = getCustomerPaymentServiceId(customer);
 		
@@ -71,11 +78,17 @@ public class OrderService {
 		return order;
 	}
 	
+	public RideOrder getOrder(Long id) {
+		return orderRepository.findOne(id);
+	}
+	
 	public RideOrder getOrderPreview(AddressRequest rideStartPoint, AddressRequest rideFinishPoint, String customerEmailAddress) throws AddressValidationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		Customer customer = customerRepository.findByEmail(customerEmailAddress);
 		GeoLocation start = addressLookupService.getGeoLocationByAddress(rideStartPoint.getPostCode(), rideStartPoint.getLine1());
 		GeoLocation end = addressLookupService.getGeoLocationByAddress(rideFinishPoint.getPostCode(), rideFinishPoint.getLine1());
 		RideOrder order = new RideOrder();
+		order.setGeoLocationStart(start.getLatitude() + "," + start.getLongitude());
+		order.setGeoLocationEnd(end.getLatitude() + "," + end.getLongitude());
 		
 		String productSku = getProductSku(start.distanceFrom(end));
 		

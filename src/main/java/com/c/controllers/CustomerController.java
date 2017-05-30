@@ -2,6 +2,7 @@ package com.c.controllers;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.c.domain.order.RideOrder;
 import com.c.domain.user.Customer;
 import com.c.domain.user.CustomerRole;
 import com.c.repositories.CustomerRepository;
+import com.c.services.order.OrderService;
 import com.c.services.user.CustomerService;
 import com.c.services.user.FacebookGraphApiClient;
 import com.c.services.user.PreAuthenticatedFacebookUserAuthenticationToken;
@@ -35,14 +38,29 @@ public class CustomerController {
 	private CustomerService customerService;
 	
 	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
 	private CustomerRepository customerRepository;
 	
-	@RequestMapping(path="", method=RequestMethod.GET)
+	@RequestMapping(path="/login/web", method=RequestMethod.GET)
 	public Customer user(Principal principal) {
 		String facebookToken = ((OAuth2AuthenticationDetails)((OAuth2Authentication) principal).getDetails()).getTokenValue();
 		String emailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
 		Customer ret = customerService.signupOrSignInCustomer(emailAddress);
 		return ret;
+	}
+	
+	@RequestMapping(path="/user/live_orders", method=RequestMethod.GET)
+	public List<RideOrder> getCurrentOrders() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isAuthenticated(auth)) {
+			String facebookToken = getFacebookTokenFromAuthentication(auth);
+			String customerEmailAddress = facebookGraphApiClient.getEmailAddressByAccessToken(facebookToken);
+			return orderService.getOrdersByCustomer(customerEmailAddress);
+		} else {
+			throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+		}
 	}
 	
 	@RequestMapping(path="/login/preauth/facebook", method=RequestMethod.POST)
@@ -55,7 +73,7 @@ public class CustomerController {
 		return ret;
 	}
 	
-	@RequestMapping(path="/enrollRideProvider", method=RequestMethod.POST)
+	@RequestMapping(path="/user/enroll_provider", method=RequestMethod.POST)
 	public Customer markCustomerAsDriver(@RequestBody EnrollRideProviderRequest enrollRideProviderRequest) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
@@ -85,4 +103,15 @@ public class CustomerController {
 		}
 		return false;
 	}
+	
+	private String getFacebookTokenFromAuthentication(Authentication auth) {
+		String facebookToken = null;
+		if(auth instanceof PreAuthenticatedFacebookUserAuthenticationToken) {
+			facebookToken = (String) ((PreAuthenticatedFacebookUserAuthenticationToken) auth).getDetails();
+		} else {
+			facebookToken = ((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue();
+		}
+		return facebookToken;
+	}
+
 }

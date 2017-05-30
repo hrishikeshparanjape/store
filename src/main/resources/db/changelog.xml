@@ -157,5 +157,14 @@
 			splitStatements="true" 
 			stripComments="true" />
 	</changeSet>
+
+	<changeSet author="hrishikeshparanjape" id="add_geo_location_to_ride_order">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/add_geo_location_to_ride_order.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
 	
 </databaseChangeLog>
