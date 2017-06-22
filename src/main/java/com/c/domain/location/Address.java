@@ -162,4 +162,41 @@ public class Address {
 				+ ", city=" + city + ", postCode=" + postCode + ", state=" + state + ", country=" + country
 				+ ", locality=" + locality + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((line1 == null) ? 0 : line1.hashCode());
+		result = prime * result + ((postCode == null) ? 0 : postCode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (line1 == null) {
+			if (other.line1 != null)
+				return false;
+		} else if (!line1.equals(other.line1))
+			return false;
+		if (postCode == null) {
+			if (other.postCode != null)
+				return false;
+		} else if (!postCode.equals(other.postCode))
+			return false;
+		return true;
+	}	
 }

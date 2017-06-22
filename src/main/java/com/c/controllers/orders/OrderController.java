@@ -29,7 +29,7 @@ import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
 
-@RestController
+//@RestController
 public class OrderController {
 	
 	@Autowired

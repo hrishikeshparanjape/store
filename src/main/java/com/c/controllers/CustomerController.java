@@ -51,7 +51,7 @@ public class CustomerController {
 		return ret;
 	}
 	
-	@RequestMapping(path="/user/live_orders", method=RequestMethod.GET)
+	//@RequestMapping(path="/user/live_orders", method=RequestMethod.GET)
 	public List<RideOrder> getCurrentOrders() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
@@ -73,7 +73,7 @@ public class CustomerController {
 		return ret;
 	}
 	
-	@RequestMapping(path="/user/enroll_provider", method=RequestMethod.POST)
+	//@RequestMapping(path="/user/enroll_provider", method=RequestMethod.POST)
 	public Customer markCustomerAsDriver(@RequestBody EnrollRideProviderRequest enrollRideProviderRequest) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isAuthenticated(auth)) {
