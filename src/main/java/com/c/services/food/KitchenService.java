@@ -89,6 +89,7 @@ public class KitchenService {
 		FoodItem item = foodItemRepository.findByName(name);
 		if(item == null) {
 			item = new FoodItem();
+			item.setName(name);
 			item.setCategories(categories);
 			item = foodItemRepository.save(item);
 			return item;
