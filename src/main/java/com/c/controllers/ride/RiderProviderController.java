@@ -24,7 +24,7 @@ import com.c.repositories.CustomerRepository;
 import com.c.repositories.RideProviderRepository;
 import com.c.services.user.FacebookGraphApiClient;
 
-@RestController
+//@RestController
 public class RiderProviderController {
 	
 	@Autowired

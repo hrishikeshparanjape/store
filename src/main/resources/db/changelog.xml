@@ -166,5 +166,14 @@
 			splitStatements="true" 
 			stripComments="true" />
 	</changeSet>
+
+	<changeSet author="hrishikeshparanjape" id="food_kitchen_events">
+		<sqlFile 
+			encoding="utf8" 
+			path="sql/food_kitchen_events.sql"
+			relativeToChangelogFile="true"
+			splitStatements="true" 
+			stripComments="true" />
+	</changeSet>
 	
 </databaseChangeLog>

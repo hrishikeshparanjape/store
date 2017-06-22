@@ -15,8 +15,6 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
@@ -35,7 +33,7 @@ public class AddressLookupService implements IAddressLookupService {
 	private ZipFile usWestAddresses;
 	private Map<String, HashSet<ZipEntry>> postCodeZipEntryMapping = new HashMap<String, HashSet<ZipEntry>>();
 
-	@PostConstruct
+	//@PostConstruct
 	public void init() throws IOException {
 		URL website = new URL("https://s3-us-west-1.amazonaws.com/storeuser-publicbucket/addresses/openaddr-collected-us_west.zip");
 		ReadableByteChannel rbc = Channels.newChannel(website.openStream());
