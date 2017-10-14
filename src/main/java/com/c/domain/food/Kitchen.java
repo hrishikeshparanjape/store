@@ -15,6 +15,7 @@ import javax.persistence.PreUpdate;
 
 import com.c.domain.location.Address;
 import com.c.domain.user.Customer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -35,7 +36,7 @@ public class Kitchen {
 	private Date updatedAt;
 	
 	@OneToMany
-	@JsonManagedReference
+	@JsonBackReference
 	private Set<FoodEvent> events;
 	
 	public Date getCreatedAt() {

@@ -14,6 +14,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class FoodEvent {
@@ -23,7 +24,7 @@ public class FoodEvent {
 	private Long id;
 	
 	@ManyToOne
-	@JsonBackReference
+	@JsonManagedReference
 	private Kitchen kitchen;
 	
 	private Date startsAt;
