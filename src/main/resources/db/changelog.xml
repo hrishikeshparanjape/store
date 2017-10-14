@@ -67,7 +67,7 @@
 			splitStatements="true" 
 			stripComments="true" />
 	</changeSet>
-	
+	<!-- 
 	<changeSet author="hrishikeshparanjape" id="zip_code_neighbors_data_1">
 			<sqlFile 
 			encoding="utf8" 
@@ -139,6 +139,8 @@
 			splitStatements="true" 
 			stripComments="true" />
 	</changeSet>
+	
+	 -->
 	
 	<changeSet author="hrishikeshparanjape" id="refactor_entities">
 		<sqlFile 
